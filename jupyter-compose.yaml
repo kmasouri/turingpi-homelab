@@ -1,0 +1,23 @@
+services:
+  jupyter:
+    image: jupyter/base-notebook:latest
+    ports:
+      - '8888:8888'
+    volumes:
+      - volume:/home/jovyan
+      - /home/kmasouri/Documents:/home/jovyan/work
+    networks:
+      - network
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+
+networks:
+  network:
+    driver: overlay
+    attachable: true
+
+volumes:
+  volume:

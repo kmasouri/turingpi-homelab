@@ -12,6 +12,7 @@ This repository contains Docker Compose files for deploying services on a Turing
     - Monitoring (Prometheus, Grafana, Node Exporter, Blackbox Exporter)
 
   - [Portal](https://github.com/kmasouri/homelab-portal) — portal for your homelab apps and bookmarks
+  - [Jupyter Notebook](https://hub.docker.com/r/jupyter/base-notebook) — interactive data & development environment
 
 - Compose
   - [Home Assistant](https://www.home-assistant.io) — home automation platform
@@ -104,6 +105,7 @@ These services use Docker volumes to store configuration and data so they surviv
 - Home Assistant → `homeassistant_volume`
 - Prometheus → `prometheus_volume`
 - Grafana → `grafana_volume`
+- Jupyter → `jupyter_volume`
 
 You don’t need to manage these manually for day-to-day use. Just keep in mind that if you ever rebuild your cluster from scratch, restoring these volumes will bring back your configs.
 
@@ -217,6 +219,30 @@ Alternatively, update the image: tag in your Compose file and redeploy the stack
   ```
 
   [See full configuration reference.](https://github.com/kmasouri/homelab-portal?tab=readme-ov-file#%EF%B8%8F-configuration)
+
+- **Jupyter (Notebook/Lab)**
+
+  A single Jupyter Notebook container for interactive Python work. Runs on a manager node and mounts persistent home plus a host directory for convenient file access.
+
+  Deploy:
+
+  ```bash
+  sudo docker stack deploy -c jupyter-compose.yaml jupyter
+  ```
+
+  Remove:
+
+  ```bash
+  sudo docker stack rm jupyter
+  ```
+
+  Accessible at: http://`<node-ip>`:8888 (first time requires the auth token printed in container logs).
+
+  To retrieve the token if needed:
+
+  ```bash
+  docker service logs jupyter_jupyter --tail 50 | grep -i token
+  ```
 
 ## 🧹 Maintenance
 
