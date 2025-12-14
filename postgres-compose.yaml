@@ -1,13 +1,16 @@
 services:
-  jupyter:
-    image: jupyter/base-notebook:latest
+  postgres:
+    image: postgres:16-alpine
     ports:
-      - '8888:8888'
+      - '5432:5432'
     volumes:
-      - volume:/home/jovyan
-      - /home/kmasouri/Documents:/home/jovyan/work
+      - volume:/var/lib/postgresql/data
     networks:
       - network
+    environment:
+      POSTGRES_DB: homelab
+      POSTGRES_USER: kmasouri
+      POSTGRES_PASSWORD: password
     deploy:
       mode: replicated
       replicas: 1
